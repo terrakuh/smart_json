@@ -111,7 +111,7 @@ inline typename std::enable_if<detail::Is_optional<Type>::value, Type>::type
   decode(const boost::json::value& json)
 {
 	if (!json.is_null()) {
-		return decode<Type>(json);
+		return decode<typename Type::value_type>(json);
 	}
 	return std::nullopt;
 }
