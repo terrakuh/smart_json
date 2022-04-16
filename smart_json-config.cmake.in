@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(Boost 1.78 REQUIRED)
+
+if(NOT TARGET smart_json::smart_json)
+	include("${CMAKE_CURRENT_LIST_DIR}/smart_json-targets.cmake")
+	set(smart_json_FOUND TRUE)
+endif()
