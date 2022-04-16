@@ -30,7 +30,7 @@ inline typename std::enable_if<detail::Is_primitive<Primitive>::value, Primitive
 		}
 		return boost::numeric_cast<Primitive>(json.as_uint64());
 	} else if constexpr (std::is_floating_point<Primitive>::value) {
-		if (const auto ptr = json.as_int64()) {
+		if (const auto ptr = json.if_int64()) {
 			return boost::numeric_cast<Primitive>(*ptr);
 		} else if (const auto ptr = json.if_uint64()) {
 			return boost::numeric_cast<Primitive>(*ptr);
