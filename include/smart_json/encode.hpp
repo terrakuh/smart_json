@@ -11,27 +11,27 @@
 namespace smart_json {
 
 template<typename Primitive>
-typename std::enable_if<detail::Is_primitive<Primitive>::value>::type encode(const Primitive& value,
-                                                                             boost::json::value& json);
+typename std::enable_if<detail::Is_primitive<Primitive>::value, boost::json::value>::type
+  encode(const Primitive& value);
 
 template<typename Enum>
-typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::value>::type
-  encode(const Enum& value, boost::json::value& json);
+typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::value, boost::json::string>::type
+  encode(const Enum& value);
 
 template<typename Type>
-typename std::enable_if<detail::Is_container<Type>::value &&
-                        !detail::Is_associative_container<Type>::value>::type
-  encode(const Type& value, boost::json::value& json);
+typename std::enable_if<detail::Is_container<Type>::value && !detail::Is_associative_container<Type>::value,
+                        boost::json::array>::type
+  encode(const Type& value);
 
 template<typename Type>
-typename std::enable_if<detail::Is_associative_container<Type>::value>::type encode(const Type& value,
-                                                                                    boost::json::value& json);
+typename std::enable_if<detail::Is_associative_container<Type>::value, boost::json::object>::type
+  encode(const Type& value);
 
 template<typename Type>
-void encode(const std::optional<Type>& value, boost::json::value& json);
+boost::json::value encode(const std::optional<Type>& value);
 
 template<typename Object>
-typename std::enable_if<boost::describe::has_describe_members<Object>::value>::type
-  encode(const Object& value, boost::json::value& json);
+typename std::enable_if<boost::describe::has_describe_members<Object>::value, boost::json::object>::type
+  encode(const Object& value);
 
 } // namespace smart_json

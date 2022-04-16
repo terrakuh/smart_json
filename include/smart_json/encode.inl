@@ -7,59 +7,63 @@
 namespace smart_json {
 
 template<typename Primitive>
-inline typename std::enable_if<detail::Is_primitive<Primitive>::value>::type encode(const Primitive& value,
-                                                                                    boost::json::value& json)
+inline typename std::enable_if<detail::Is_primitive<Primitive>::value, boost::json::value>::type
+  encode(const Primitive& value)
 {
-	json = value;
+	return boost::json::value_from(value);
 }
 
 template<typename Enum>
-inline typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::value>::type
-  encode(const Enum& value, boost::json::value& json)
+inline
+  typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::value, boost::json::string>::type
+  encode(const Enum& value)
 {
-	json = boost::describe::enum_to_string(value, nullptr);
+	return boost::describe::enum_to_string(value, nullptr);
 }
 
 template<typename Type>
-inline typename std::enable_if<detail::Is_container<Type>::value &&
-                               !detail::Is_associative_container<Type>::value>::type
-  encode(const Type& value, boost::json::value& json)
+inline
+  typename std::enable_if<detail::Is_container<Type>::value && !detail::Is_associative_container<Type>::value,
+                          boost::json::array>::type
+  encode(const Type& value)
 {
-	auto& array = json.emplace_array();
+	boost::json::array array;
 	for (const auto& el : value) {
-		boost::json::value val;
-		encode(el, val);
-		array.push_back(std::move(val));
+		array.push_back(encode(el));
 	}
+	return array;
 }
 
 template<typename Type>
-inline typename std::enable_if<detail::Is_associative_container<Type>::value>::type
-  encode(const Type& value, boost::json::value& json)
+inline typename std::enable_if<detail::Is_associative_container<Type>::value, boost::json::object>::type
+  encode(const Type& value)
 {
-	auto& object = json.emplace_object();
+	boost::json::object object;
 	for (const auto& [key, el] : value) {
-		boost::json::value val;
-		encode(el, val);
-		object[key] = std::move(val);
+		object[key] = encode(el);
 	}
+	return object;
 }
 
 template<typename Type>
-inline void encode(const std::optional<Type>& value, boost::json::value& json)
+inline boost::json::value encode(const std::optional<Type>& value)
 {
 	if (value.has_value()) {
-		encode(value.value(), json);
+		return encode(value.value());
 	}
+	return {};
 }
 
 template<typename Object>
-inline typename std::enable_if<boost::describe::has_describe_members<Object>::value>::type
-  encode(const Object& value, boost::json::value& json)
+inline
+  typename std::enable_if<boost::describe::has_describe_members<Object>::value, boost::json::object>::type
+  encode(const Object& value)
 {
-	auto& object  = json.emplace_object();
+	boost::json::object object;
 	using Members = boost::describe::describe_members<Object, boost::describe::mod_any_access>;
-	boost::mp11::mp_for_each<Members>([&](auto member) { encode(value.*member.pointer, object[member.name]); });
+	boost::mp11::mp_for_each<Members>(
+	  [&](auto member) { object[member.name] = encode(value.*member.pointer); });
+	return object;
 }
 
 } // namespace smart_json

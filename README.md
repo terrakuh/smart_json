@@ -32,7 +32,6 @@ BOOST_DESCRIBE_STRUCT(Config::Nested, (), (value));
 
 int main()
 {
-  boost::json::value obj;
   Config config{
     "v0.0.0",
     Log_level::info,
@@ -44,8 +43,10 @@ int main()
   config.fixed_array[2].value = 3;
   config.array.push_back({ 61 });
 
-  smart_json::encode(config, obj);
+  auto obj = smart_json::encode(config);
   std::cout << boost::json::serialize(obj) << "\n";
+
+  config = smart_json::decode<Config>(obj);
 }
 ```
 
@@ -81,7 +82,7 @@ And the output (formatted) is:
 ## Supported types
 
 - Any arithmetic type (`bool`, integrals, floating points)
-- `const char*` and `std::string`
+- `std::string`
 - `std::optional`
 - Any `enum` / `struct` / `class` described with [Boost.Describe]
 - Any container (eg. `std::vector`, `std::array`, etc.) that statisfies the following conditions will be encoded as an array:

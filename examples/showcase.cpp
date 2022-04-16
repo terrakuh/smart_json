@@ -28,7 +28,6 @@ BOOST_DESCRIBE_STRUCT(Config::Nested, (), (value));
 
 int main()
 {
-	boost::json::value obj;
 	Config config{
 		"v0.0.0",
 		Log_level::info,
@@ -39,8 +38,8 @@ int main()
 	config.fixed_array[1].value = 2;
 	config.fixed_array[2].value = 3;
 	config.array.push_back({ 61 });
-	smart_json::encode(config, obj);
+	auto obj = smart_json::encode(config);
 	std::cout << boost::json::serialize(obj) << "\n";
 
-	smart_json::decode(config, obj);
+	config = smart_json::decode<Config>(obj);
 }
