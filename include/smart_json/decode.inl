@@ -16,10 +16,25 @@ inline typename std::enable_if<detail::Is_primitive<Primitive>::value, Primitive
 	if constexpr (std::is_same<Primitive, bool>::value) {
 		return json.as_bool();
 	} else if constexpr (std::is_signed<Primitive>::value) {
+		if (const auto ptr = json.if_double()) {
+			return boost::numeric_cast<Primitive>(*ptr);
+		} else if (const auto ptr = json.if_uint64()) {
+			return boost::numeric_cast<Primitive>(*ptr);
+		}
 		return boost::numeric_cast<Primitive>(json.as_int64());
 	} else if constexpr (std::is_unsigned<Primitive>::value) {
+		if (const auto ptr = json.if_double()) {
+			return boost::numeric_cast<Primitive>(*ptr);
+		} else if (const auto ptr = json.if_int64()) {
+			return boost::numeric_cast<Primitive>(*ptr);
+		}
 		return boost::numeric_cast<Primitive>(json.as_uint64());
 	} else if constexpr (std::is_floating_point<Primitive>::value) {
+		if (const auto ptr = json.as_int64()) {
+			return boost::numeric_cast<Primitive>(*ptr);
+		} else if (const auto ptr = json.if_uint64()) {
+			return boost::numeric_cast<Primitive>(*ptr);
+		}
 		return boost::numeric_cast<Primitive>(json.as_double());
 	} else {
 		const auto& str = json.as_string();

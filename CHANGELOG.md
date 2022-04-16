@@ -5,6 +5,7 @@
 ## [v0.2.1] - 2022-04-16
 ### Fixed
 - Infinitie recursion for `std::optional` decoding
+- Primitive decoding when type does not match exactly
 
 ## [v0.2] - 2022-04-16
 ### Changed
