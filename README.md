@@ -104,10 +104,10 @@ And the output (formatted) is:
 
 There is no compiling required. However, there are some CMake options:
 
-| Option                    | Default | Description                                                                 |
-| ------------------------- | ------- | --------------------------------------------------------------------------- |
-| SMART_JSON_BUILD_EXAMPLES | `OFF`   | Builds the examples in `examples/`                                          |
-| SMART_JSON_FETCH_CONTENT  | `ON`    | Automagically fetches the missing and required dependencies from github.com |
+| Option                    | Default | Description                                                 |
+| ------------------------- | ------- | ----------------------------------------------------------- |
+| SMART_JSON_BUILD_EXAMPLES | `OFF`   | Builds the examples in `examples/`                          |
+| SMART_JSON_FETCH_CONTENT  | `ON`    | Automagically fetches the missing and required dependencies |
 
 [Boost.Describe]: https://www.boost.org/doc/libs/1_78_0/libs/describe/doc/html/describe.html
 
