@@ -26,6 +26,16 @@ struct Config
 BOOST_DESCRIBE_STRUCT(Config, (), (log_path, log_level, additional_headers, save_path, fixed_array, array));
 BOOST_DESCRIBE_STRUCT(Config::Nested, (), (value));
 
+template<std::size_t Len>
+constexpr auto make_array(const char* name)
+{
+	 smart_json::String_container<Len> w;
+	for (int i = 0; i < Len; ++i) {
+		w[i] = name[i];
+	}
+	return w;
+}
+
 int main()
 {
 	Config config{

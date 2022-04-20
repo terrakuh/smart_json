@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(
   smart_json
-  VERSION 0.2.1
+  VERSION 0.3.0
   DESCRIPTION "Header only automatic JSON encoding and decoding with Boost.Describe"
   HOMEPAGE_URL "https://github.com/terrakuh/smart_json"
   LANGUAGES CXX

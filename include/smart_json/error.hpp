@@ -13,6 +13,7 @@ enum class Code
 	missing_field,
 	too_many_entries,
 	too_few_entries,
+	bad_input_length,
 };
 
 inline const std::error_category& error_category() noexcept
@@ -33,6 +34,7 @@ inline const std::error_category& error_category() noexcept
 			case Code::missing_field: return "missing field";
 			case Code::too_many_entries: return "too many entries in fixed array";
 			case Code::too_few_entries: return "too few entries in fixed array";
+			case Code::bad_input_length: return "bad input length";
 
 			default: return "(unknown error code)";
 			}

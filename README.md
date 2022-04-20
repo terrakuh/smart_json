@@ -54,13 +54,13 @@ And the output (formatted) is:
 
 ```json
 {
-  "log_path": "v0.0.0",
-  "log_level": "info",
-  "additional_headers": {
+  "logPath": "v0.0.0",
+  "logLevel": "info",
+  "additionalHeaders": {
     "User-Agent": "smart_json"
   },
-  "save_path": null,
-  "fixed_array": [
+  "savePath": null,
+  "fixedArray": [
     {
       "value": 1
     },
@@ -78,6 +78,8 @@ And the output (formatted) is:
   ]
 }
 ```
+
+Note that the member names in C++ are in the typical snake-case format and will be automagically converted to the JSON typical camel-case. This is guaranteed to happen at compile time and inflicts no additional cost at runtime. If you want to implement a custom transformer, have a look at the [`smart_json::Camel_case_transformer`](./include/smart_json/camel_case_transformer.hpp) or the [`Upper_case_transformer`](./examples/playground.cpp) in the playgrounds example. You can also use `smart_json::No_transformer` if no conversion is desired.
 
 ## Supported types
 
