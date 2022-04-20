@@ -116,8 +116,8 @@ There is no compiling required. However, there are some CMake options:
 ## Usage
 
 ```cmake
-find_package(smart_json 0.1 REQUIRED)
-target_link_libraries(myproject PRIVATE smart_json)
+find_package(smart_json 0.3 REQUIRED)
+target_link_libraries(myproject PRIVATE smart_json::smart_json)
 ```
 
 And if you want to automagically fetch Boost 1.78 just add this before `find_package(smart_json)`:
