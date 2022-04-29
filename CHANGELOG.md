@@ -1,6 +1,11 @@
 # Change Log
 
-## [Unreleased]
+## [v0.4] - 2022-04-29
+### Added
+- Adapter interface to support generic JSON containers
+- Support for `boost::property_tree::ptree`
+- Support for `nlohmann::json`
+- In-place operations for `encode()` and `decode()`
 
 ## [v0.3] - 2022-04-20
 ### Added
@@ -20,7 +25,8 @@
 ### Removed
 - `const char*` no longer supported as string
 
-[Unreleased]: https://github.com/terrakuh/smart_json/compare/v0.3..dev
+[Unreleased]: https://github.com/terrakuh/smart_json/compare/v0.4..dev
+[v0.4]: https://github.com/terrakuh/smart_json/compare/v0.3..v0.4
 [v0.3]: https://github.com/terrakuh/smart_json/compare/v0.2.1..v0.3
 [v0.2.1]: https://github.com/terrakuh/smart_json/compare/v0.2..v0.2.1
 [v0.2]: https://github.com/terrakuh/smart_json/compare/v0.1..v0.2

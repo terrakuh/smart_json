@@ -1,5 +1,5 @@
 #include <array>
-#include <boost/json/src.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <iostream>
 #include <map>
 #include <optional>
@@ -38,8 +38,9 @@ int main()
 	config.fixed_array[1].value = 2;
 	config.fixed_array[2].value = 3;
 	config.array.push_back({ 61 });
-	auto obj = smart_json::encode<boost::json::object>(config);
-	std::cout << boost::json::serialize(obj) << "\n";
+	auto obj = smart_json::encode<boost::property_tree::ptree>(config);
+	boost::property_tree::write_json(std::cout, obj);
+	std::cout << "\n";
 
 	config = smart_json::decode<Config>(obj);
 }

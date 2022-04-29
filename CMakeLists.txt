@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(
   smart_json
-  VERSION 0.3.0
+  VERSION 0.4.0
   DESCRIPTION "Header only automatic JSON encoding and decoding with Boost.Describe"
   HOMEPAGE_URL "https://github.com/terrakuh/smart_json"
   LANGUAGES CXX
@@ -46,6 +46,29 @@ if(NOT Boost_FOUND AND SMART_JSON_FETCH_CONTENT)
   find_package(Boost 1.78 REQUIRED)
 endif()
 
+macro(require_optional_dependencies)
+  if(NOT TARGET nlohmann_json::nlohmann_json)
+    find_package(nlohmann_json ${find_package_option})
+    if(NOT nlohmann_json_FOUND AND SMART_JSON_FETCH_CONTENT)
+      message(STATUS "Fetching nlohmann/json")
+      file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/nlohmann")
+      file(DOWNLOAD https://github.com/nlohmann/json/releases/download/v3.10.5/json.hpp
+           "${CMAKE_CURRENT_BINARY_DIR}/include/nlohmann/json.hpp"
+           EXPECTED_HASH SHA256=e832d339d9e0c042e7dff807754769d778cf5d6ae9730ce21eed56de99cb5e86
+      )
+      add_library(nlohmann_json INTERFACE IMPORTED)
+      add_library(nlohmann_json::nlohmann_json ALIAS nlohmann_json)
+      target_include_directories(
+        nlohmann_json INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
+      )
+    endif()
+  endif()
+endmacro()
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  include(CTest)
+endif()
+
 # Library
 file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/include/*.(hpp|inl)")
 add_library(smart_json INTERFACE)
@@ -63,6 +86,11 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" DESTINATION include/)
 # Examples
 if(SMART_JSON_BUILD_EXAMPLES)
   add_subdirectory(examples)
+endif()
+
+# Tests
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+  add_subdirectory(tests)
 endif()
 
 # Install

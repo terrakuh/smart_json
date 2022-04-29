@@ -1,6 +1,12 @@
 # Smart JSON
 
-Header only automatic JSON encoding and decoding with [Boost.Describe]. Currently only [Boost.JSON](https://www.boost.org/doc/libs/1_78_0/libs/json/doc/html/index.html) is supported but other JSON libraries such as [nlohmann/json](https://github.com/nlohmann/json) could be integrated (in future). The following requirements need to be fulfilled:
+Header only automatic JSON encoding and decoding with [Boost.Describe]. There are adapters for the following JSON libraries:
+
+- [Boost.JSON](https://www.boost.org/doc/libs/1_78_0/libs/json/doc/html/index.html)
+- [Boost.PropertyTree](https://www.boost.org/doc/libs/1_78_0/doc/html/property_tree.html)
+- [nlohmann/json](https://github.com/nlohmann/json)
+
+The following requirements need to be fulfilled:
 
 - C++ 17
 - CMake >= 3.14
@@ -43,7 +49,7 @@ int main()
   config.fixed_array[2].value = 3;
   config.array.push_back({ 61 });
 
-  auto obj = smart_json::encode(config);
+  auto obj = smart_json::encode<boost::json::object>(config);
   std::cout << boost::json::serialize(obj) << "\n";
 
   config = smart_json::decode<Config>(obj);
@@ -59,7 +65,6 @@ And the output (formatted) is:
   "additionalHeaders": {
     "User-Agent": "smart_json"
   },
-  "savePath": null,
   "fixedArray": [
     {
       "value": 1
@@ -116,7 +121,7 @@ There is no compiling required. However, there are some CMake options:
 ## Usage
 
 ```cmake
-find_package(smart_json 0.3 REQUIRED)
+find_package(smart_json 0.4 REQUIRED)
 target_link_libraries(myproject PRIVATE smart_json::smart_json)
 ```
 

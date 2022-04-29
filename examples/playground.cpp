@@ -55,7 +55,8 @@ BOOST_DESCRIBE_STRUCT(Config::Log, (), (level, path));
 
 int main()
 {
-	auto obj = smart_json::encode(Config{ "v0.0.0", 123, { { "hi", "yo" } } }, Upper_case_transformer{});
+	auto obj = smart_json::encode<boost::json::object>(Config{ "v0.0.0", 123, { { "hi", "yo" } } },
+	                                                   Upper_case_transformer{});
 
 	std::cout << boost::json::serialize(obj) << "\n";
 	auto config = smart_json::decode<Config>(obj, Upper_case_transformer{});

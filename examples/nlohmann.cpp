@@ -1,7 +1,7 @@
 #include <array>
-#include <boost/json/src.hpp>
 #include <iostream>
 #include <map>
+#include <nlohmann/json.hpp>
 #include <optional>
 #include <smart_json/smart_json.hpp>
 #include <string>
@@ -38,8 +38,8 @@ int main()
 	config.fixed_array[1].value = 2;
 	config.fixed_array[2].value = 3;
 	config.array.push_back({ 61 });
-	auto obj = smart_json::encode<boost::json::object>(config);
-	std::cout << boost::json::serialize(obj) << "\n";
+	auto obj = smart_json::encode<nlohmann::json>(config);
+	std::cout << obj << "\n";
 
 	config = smart_json::decode<Config>(obj);
 }
