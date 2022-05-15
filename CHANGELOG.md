@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Fixed
 - Fix empty array encoding
+- Fix empty object encoding
 
 ## [v0.4] - 2022-04-29
 ### Added

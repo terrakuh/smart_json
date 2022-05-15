@@ -61,6 +61,8 @@ struct Adapter<boost::property_tree::ptree, void>
 	{
 		return {};
 	}
+	static void emplace_object(boost::property_tree::ptree& tree)
+	{}
 	template<typename Key>
 	static void insert(boost::property_tree::ptree& json, const Key& key, boost::property_tree::ptree&& mapped)
 	{

@@ -62,6 +62,10 @@ struct Adapter<nlohmann::json, void>
 	{
 		return {};
 	}
+	static void emplace_object(nlohmann::json& json)
+	{
+		json.emplace_object();
+	}
 	template<typename Key>
 	static void insert(nlohmann::json& json, const Key& key, nlohmann::json&& mapped)
 	{

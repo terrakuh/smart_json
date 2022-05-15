@@ -48,10 +48,14 @@ template<typename JSON, typename Type, typename Transformer>
 inline typename std::enable_if<detail::Is_associative_container<Type>::value, bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer)
 {
-	for (const auto& [key, el] : value) {
-		auto mapped = adapter::Adapter<JSON>::make_mapped();
-		do_encode(mapped, el, transformer);
-		adapter::Adapter<JSON>::insert(json, key, std::move(mapped));
+	if (value.begin() == value.end()) {
+		adapter::Adapter<JSON>::emplace_object(json);
+	} else {
+		for (const auto& [key, el] : value) {
+			auto mapped = adapter::Adapter<JSON>::make_mapped();
+			do_encode(mapped, el, transformer);
+			adapter::Adapter<JSON>::insert(json, key, std::move(mapped));
+		}
 	}
 	return true;
 }

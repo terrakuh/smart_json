@@ -108,6 +108,10 @@ struct Adapter<JSON, typename std::enable_if<std::is_same<JSON, boost::json::val
 	{
 		return {};
 	}
+	static void emplace_object(boost::json::value& json)
+	{
+		json.emplace_object();
+	}
 	template<typename Key>
 	static void insert(boost::json::object& json, const Key& key, boost::json::value&& mapped)
 	{
