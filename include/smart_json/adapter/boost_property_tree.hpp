@@ -6,25 +6,18 @@
 namespace smart_json::adapter {
 
 template<>
-struct Adapter<boost::property_tree::ptree, void>
-{
+struct Adapter<boost::property_tree::ptree, void> {
 	template<typename Type>
 	static Type get(const boost::property_tree::ptree& json)
 	{
 		return json.get_value<Type>();
 	}
-	static const boost::property_tree::ptree& as_array(const boost::property_tree::ptree& json)
-	{
-		return json;
-	}
+	static const boost::property_tree::ptree& as_array(const boost::property_tree::ptree& json) { return json; }
 	static const boost::property_tree::ptree& as_object(const boost::property_tree::ptree& json)
 	{
 		return json;
 	}
-	static bool is_null(const boost::property_tree::ptree& json)
-	{
-		return false;
-	}
+	static bool is_null(const boost::property_tree::ptree& json) { return false; }
 	static const boost::property_tree::ptree* find(const boost::property_tree::ptree& json, const char* name)
 	{
 		if (const auto it = json.find(name); it != json.not_found()) {
@@ -47,22 +40,14 @@ struct Adapter<boost::property_tree::ptree, void>
 	{
 		json.put_value(value);
 	}
-	static boost::property_tree::ptree make_element()
-	{
-		return {};
-	}
-	static void emplace_array(boost::property_tree::ptree& tree)
-	{}
+	static boost::property_tree::ptree make_element() { return {}; }
+	static void emplace_array(boost::property_tree::ptree& tree) {}
 	static void push(boost::property_tree::ptree& json, boost::property_tree::ptree&& element)
 	{
 		json.push_back(std::make_pair("", std::move(element)));
 	}
-	static boost::property_tree::ptree make_mapped()
-	{
-		return {};
-	}
-	static void emplace_object(boost::property_tree::ptree& tree)
-	{}
+	static boost::property_tree::ptree make_mapped() { return {}; }
+	static void emplace_object(boost::property_tree::ptree& tree) {}
 	template<typename Key>
 	static void insert(boost::property_tree::ptree& json, const Key& key, boost::property_tree::ptree&& mapped)
 	{

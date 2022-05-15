@@ -7,8 +7,7 @@
 
 namespace smart_json {
 
-struct Camel_case_transformer
-{
+struct Camel_case_transformer {
 	/// Calculates the final string length of the normalized name.
 	constexpr static std::size_t length(const char* str) noexcept
 	{

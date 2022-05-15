@@ -9,15 +9,13 @@
 
 BOOST_DEFINE_ENUM_CLASS(Log_level, off, debug, info, error);
 
-struct Config
-{
+struct Config {
 	std::string log_path;
 	Log_level log_level;
 	std::map<std::string, std::string> additional_headers;
 	std::optional<std::string> save_path;
 
-	struct Nested
-	{
+	struct Nested {
 		int value = 0;
 	};
 	std::array<Nested, 3> fixed_array;

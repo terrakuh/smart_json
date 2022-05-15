@@ -6,8 +6,7 @@
 
 namespace smart_json {
 
-struct No_transformer
-{
+struct No_transformer {
 	/// Calculates the final string length of the normalized name.
 	constexpr static std::size_t length(const char* str) noexcept
 	{

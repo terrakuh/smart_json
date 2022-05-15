@@ -11,8 +11,7 @@ template<typename JSON>
 struct Adapter<JSON, typename std::enable_if<std::is_same<JSON, boost::json::value>::value ||
                                              std::is_same<JSON, boost::json::object>::value ||
                                              std::is_same<JSON, boost::json::array>::value ||
-                                             std::is_same<JSON, boost::json::string>::value>::type>
-{
+                                             std::is_same<JSON, boost::json::string>::value>::type> {
 	template<typename Type>
 	static Type get(const boost::json::value& json)
 	{
@@ -47,26 +46,11 @@ struct Adapter<JSON, typename std::enable_if<std::is_same<JSON, boost::json::val
 			return std::string{ str.c_str(), str.size() };
 		}
 	}
-	static const boost::json::array& as_array(const boost::json::value& json)
-	{
-		return json.as_array();
-	}
-	static const boost::json::array& as_array(const boost::json::array& json)
-	{
-		return json;
-	}
-	static const boost::json::object& as_object(const boost::json::value& json)
-	{
-		return json.as_object();
-	}
-	static const boost::json::object& as_object(const boost::json::object& json)
-	{
-		return json;
-	}
-	static bool is_null(const boost::json::value& json)
-	{
-		return json.is_null();
-	}
+	static const boost::json::array& as_array(const boost::json::value& json) { return json.as_array(); }
+	static const boost::json::array& as_array(const boost::json::array& json) { return json; }
+	static const boost::json::object& as_object(const boost::json::value& json) { return json.as_object(); }
+	static const boost::json::object& as_object(const boost::json::object& json) { return json; }
+	static bool is_null(const boost::json::value& json) { return json.is_null(); }
 	static const boost::json::value* find(const boost::json::object& json, const char* name)
 	{
 		if (const auto it = json.find(name); it != json.end()) {
@@ -88,14 +72,8 @@ struct Adapter<JSON, typename std::enable_if<std::is_same<JSON, boost::json::val
 	{
 		json = boost::json::value_from(value);
 	}
-	static boost::json::value make_element()
-	{
-		return {};
-	}
-	static void emplace_array(boost::json::value& json)
-	{
-		json.emplace_array();
-	}
+	static boost::json::value make_element() { return {}; }
+	static void emplace_array(boost::json::value& json) { json.emplace_array(); }
 	static void push(boost::json::array& json, boost::json::value&& element)
 	{
 		json.push_back(std::move(element));
@@ -104,14 +82,8 @@ struct Adapter<JSON, typename std::enable_if<std::is_same<JSON, boost::json::val
 	{
 		push(json.is_null() ? json.emplace_array() : json.as_array(), std::move(element));
 	}
-	static boost::json::value make_mapped()
-	{
-		return {};
-	}
-	static void emplace_object(boost::json::value& json)
-	{
-		json.emplace_object();
-	}
+	static boost::json::value make_mapped() { return {}; }
+	static void emplace_object(boost::json::value& json) { json.emplace_object(); }
 	template<typename Key>
 	static void insert(boost::json::object& json, const Key& key, boost::json::value&& mapped)
 	{

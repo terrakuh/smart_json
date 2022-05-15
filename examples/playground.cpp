@@ -4,8 +4,7 @@
 #include <smart_json/smart_json.hpp>
 #include <vector>
 
-struct Upper_case_transformer
-{
+struct Upper_case_transformer {
 	/// Calculates the final string length of the normalized name.
 	constexpr static std::size_t length(const char* str) noexcept
 	{
@@ -33,13 +32,11 @@ struct Upper_case_transformer
 };
 
 BOOST_DEFINE_ENUM_CLASS(Status, delivered, pending, cancelled);
-struct Config
-{
+struct Config {
 	std::string version;
 	int something;
 	std::map<std::string, std::string> map;
-	struct Log
-	{
+	struct Log {
 		int level;
 		std::string path;
 	} log;
