@@ -1,5 +1,9 @@
 # Change Log
 
+## [Unreleased]
+### Fixed
+- Fix empty array encoding
+
 ## [v0.4] - 2022-04-29
 ### Added
 - Adapter interface to support generic JSON containers

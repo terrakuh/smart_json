@@ -50,6 +50,10 @@ struct Adapter<nlohmann::json, void>
 	{
 		return {};
 	}
+	static void emplace_array(nlohmann::json& json)
+	{
+		json.emplace_array();
+	}
 	static void push(nlohmann::json& json, nlohmann::json&& element)
 	{
 		json.push_back(std::move(element));

@@ -51,6 +51,8 @@ struct Adapter<boost::property_tree::ptree, void>
 	{
 		return {};
 	}
+	static void emplace_array(boost::property_tree::ptree& tree)
+	{}
 	static void push(boost::property_tree::ptree& json, boost::property_tree::ptree&& element)
 	{
 		json.push_back(std::make_pair("", std::move(element)));

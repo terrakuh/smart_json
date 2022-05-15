@@ -92,6 +92,10 @@ struct Adapter<JSON, typename std::enable_if<std::is_same<JSON, boost::json::val
 	{
 		return {};
 	}
+	static void emplace_array(boost::json::value& json)
+	{
+		json.emplace_array();
+	}
 	static void push(boost::json::array& json, boost::json::value&& element)
 	{
 		json.push_back(std::move(element));

@@ -32,10 +32,14 @@ inline
                           bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer)
 {
-	for (const auto& el : value) {
-		auto element = adapter::Adapter<JSON>::make_element();
-		do_encode(element, el, transformer);
-		adapter::Adapter<JSON>::push(json, std::move(element));
+	if (value.begin() == value.end()) {
+		adapter::Adapter<JSON>::emplace_array(json);
+	} else {
+		for (const auto& el : value) {
+			auto element = adapter::Adapter<JSON>::make_element();
+			do_encode(element, el, transformer);
+			adapter::Adapter<JSON>::push(json, std::move(element));
+		}
 	}
 	return true;
 }
