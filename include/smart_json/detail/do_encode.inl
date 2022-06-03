@@ -7,10 +7,18 @@
 namespace smart_json::detail {
 
 template<typename JSON, typename Primitive, typename Transformer>
-inline typename std::enable_if<detail::Is_primitive<Primitive>::value, bool>::type
+inline typename std::enable_if<Is_primitive<Primitive>::value, bool>::type
   do_encode(JSON& json, const Primitive& primitive, const Transformer& transformer)
 {
 	adapter::Adapter<JSON>::put(json, primitive);
+	return true;
+}
+
+template<typename JSON, typename Type, typename Transformer>
+inline typename std::enable_if<Has_codec<Type>::value, bool>::type do_encode(JSON& json, const Type& value,
+                                                                             const Transformer& transformer)
+{
+	Codec<Type>::encode(json, value);
 	return true;
 }
 
@@ -28,8 +36,7 @@ inline typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::
 
 template<typename JSON, typename Type, typename Transformer>
 inline
-  typename std::enable_if<detail::Is_container<Type>::value && !detail::Is_associative_container<Type>::value,
-                          bool>::type
+  typename std::enable_if<Is_container<Type>::value && !Is_associative_container<Type>::value, bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer)
 {
 	if (value.begin() == value.end()) {
@@ -45,7 +52,7 @@ inline
 }
 
 template<typename JSON, typename Type, typename Transformer>
-inline typename std::enable_if<detail::Is_associative_container<Type>::value, bool>::type
+inline typename std::enable_if<Is_associative_container<Type>::value, bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer)
 {
 	if (value.begin() == value.end()) {

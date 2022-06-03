@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../adapter.hpp"
+#include "../codec.hpp"
 #include "../error.hpp"
 #include "do_decode.hpp"
 #include "has_access.hpp"
@@ -15,6 +16,13 @@ inline typename std::enable_if<Is_primitive<Primitive>::value>::type
   do_decode(const JSON& json, Primitive& output, const Transformer& transformer)
 {
 	output = adapter::Adapter<JSON>::template get<Primitive>(json);
+}
+
+template<typename JSON, typename Type, typename Transformer>
+inline typename std::enable_if<Has_codec<Type>::value>::type do_decode(const JSON& json, Type& output,
+                                                                       const Transformer& transformer)
+{
+	Codec<Type>::decode(json, output);
 }
 
 template<typename JSON, typename Enum, typename Transformer>

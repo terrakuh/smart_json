@@ -11,20 +11,23 @@
 namespace smart_json::detail {
 
 template<typename JSON, typename Primitive, typename Transformer>
-typename std::enable_if<detail::Is_primitive<Primitive>::value, bool>::type
+typename std::enable_if<Is_primitive<Primitive>::value, bool>::type
   do_encode(JSON& json, const Primitive& value, const Transformer& transformer);
+
+template<typename JSON, typename Type, typename Transformer>
+typename std::enable_if<Has_codec<Type>::value, bool>::type do_encode(JSON& json, const Type& value,
+                                                                      const Transformer& transformer);
 
 template<typename JSON, typename Enum, typename Transformer>
 typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::value, bool>::type
   do_encode(JSON& json, const Enum& value, const Transformer& transformer);
 
 template<typename JSON, typename Type, typename Transformer>
-typename std::enable_if<detail::Is_container<Type>::value && !detail::Is_associative_container<Type>::value,
-                        bool>::type
+typename std::enable_if<Is_container<Type>::value && !Is_associative_container<Type>::value, bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer);
 
 template<typename JSON, typename Type, typename Transformer>
-typename std::enable_if<detail::Is_associative_container<Type>::value, bool>::type
+typename std::enable_if<Is_associative_container<Type>::value, bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer);
 
 template<typename JSON, typename Type, typename Transformer>
