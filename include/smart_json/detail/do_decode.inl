@@ -12,7 +12,7 @@
 namespace smart_json::detail {
 
 template<typename JSON, typename Primitive, typename Transformer>
-inline typename std::enable_if<Is_primitive<Primitive>::value>::type
+inline typename std::enable_if<!Has_codec<Primitive>::value && Is_primitive<Primitive>::value>::type
   do_decode(const JSON& json, Primitive& output, const Transformer& transformer)
 {
 	output = adapter::Adapter<JSON>::template get<Primitive>(json);
@@ -26,7 +26,8 @@ inline typename std::enable_if<Has_codec<Type>::value>::type do_decode(const JSO
 }
 
 template<typename JSON, typename Enum, typename Transformer>
-inline typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::value>::type
+inline typename std::enable_if<!Has_codec<Enum>::value &&
+                               boost::describe::has_describe_enumerators<Enum>::value>::type
   do_decode(const JSON& json, Enum& output, const Transformer& transformer)
 {
 	if (auto str = adapter::Adapter<JSON>::template get<std::string>(json);
@@ -36,7 +37,8 @@ inline typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::
 }
 
 template<typename JSON, typename Type, typename Transformer>
-inline typename std::enable_if<Is_container<Type>::value && !Is_associative_container<Type>::value>::type
+inline typename std::enable_if<!Has_codec<Type>::value && Is_container<Type>::value &&
+                               !Is_associative_container<Type>::value>::type
   do_decode(const JSON& json, Type& output, const Transformer& transformer)
 {
 	constexpr bool has_push_back  = Has_push_back<Type, typename Type::value_type>::value;
@@ -72,7 +74,7 @@ inline typename std::enable_if<Is_container<Type>::value && !Is_associative_cont
 }
 
 template<typename JSON, typename Type, typename Transformer>
-inline typename std::enable_if<Is_associative_container<Type>::value>::type
+inline typename std::enable_if<!Has_codec<Type>::value && Is_associative_container<Type>::value>::type
   do_decode(const JSON& json, Type& output, const Transformer& transformer)
 {
 	const auto& object = adapter::Adapter<JSON>::as_object(json);
@@ -85,8 +87,8 @@ inline typename std::enable_if<Is_associative_container<Type>::value>::type
 }
 
 template<typename JSON, typename Type, typename Transformer>
-inline typename std::enable_if<Is_optional<Type>::value>::type do_decode(const JSON& json, Type& output,
-                                                                         const Transformer& transformer)
+inline typename std::enable_if<!Has_codec<Type>::value && Is_optional<Type>::value>::type
+  do_decode(const JSON& json, Type& output, const Transformer& transformer)
 {
 	if (!adapter::Adapter<JSON>::is_null(json)) {
 		do_decode(json, output.emplace(), transformer);
@@ -94,7 +96,8 @@ inline typename std::enable_if<Is_optional<Type>::value>::type do_decode(const J
 }
 
 template<typename JSON, typename Object, typename Transformer>
-inline typename std::enable_if<boost::describe::has_describe_members<Object>::value>::type
+inline typename std::enable_if<!Has_codec<Object>::value &&
+                               boost::describe::has_describe_members<Object>::value>::type
   do_decode(const JSON& json, Object& output, const Transformer& transformer)
 {
 	using Members      = boost::describe::describe_members<Object, boost::describe::mod_any_access>;

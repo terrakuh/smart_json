@@ -7,7 +7,7 @@
 namespace smart_json::detail {
 
 template<typename JSON, typename Primitive, typename Transformer>
-inline typename std::enable_if<Is_primitive<Primitive>::value, bool>::type
+inline typename std::enable_if<!Has_codec<Primitive>::value && Is_primitive<Primitive>::value, bool>::type
   do_encode(JSON& json, const Primitive& primitive, const Transformer& transformer)
 {
 	adapter::Adapter<JSON>::put(json, primitive);
@@ -23,7 +23,9 @@ inline typename std::enable_if<Has_codec<Type>::value, bool>::type do_encode(JSO
 }
 
 template<typename JSON, typename Enum, typename Transformer>
-inline typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::value, bool>::type
+inline
+  typename std::enable_if<!Has_codec<Enum>::value && boost::describe::has_describe_enumerators<Enum>::value,
+                          bool>::type
   do_encode(JSON& json, const Enum& enum_, const Transformer& transformer)
 {
 	const char* str = boost::describe::enum_to_string(enum_, nullptr);
@@ -35,8 +37,8 @@ inline typename std::enable_if<boost::describe::has_describe_enumerators<Enum>::
 }
 
 template<typename JSON, typename Type, typename Transformer>
-inline
-  typename std::enable_if<Is_container<Type>::value && !Is_associative_container<Type>::value, bool>::type
+inline typename std::enable_if<
+  !Has_codec<Type>::value && Is_container<Type>::value && !Is_associative_container<Type>::value, bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer)
 {
 	if (value.begin() == value.end()) {
@@ -52,7 +54,7 @@ inline
 }
 
 template<typename JSON, typename Type, typename Transformer>
-inline typename std::enable_if<Is_associative_container<Type>::value, bool>::type
+inline typename std::enable_if<!Has_codec<Type>::value && Is_associative_container<Type>::value, bool>::type
   do_encode(JSON& json, const Type& value, const Transformer& transformer)
 {
 	if (value.begin() == value.end()) {
@@ -77,7 +79,9 @@ inline bool do_encode(JSON& json, const std::optional<Type>& value, const Transf
 }
 
 template<typename JSON, typename Object, typename Transformer>
-inline typename std::enable_if<boost::describe::has_describe_members<Object>::value, bool>::type
+inline
+  typename std::enable_if<!Has_codec<Object>::value && boost::describe::has_describe_members<Object>::value,
+                          bool>::type
   do_encode(JSON& json, const Object& value, const Transformer& transformer)
 {
 	using Members = boost::describe::describe_members<Object, boost::describe::mod_any_access>;
